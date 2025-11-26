@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b10o7enff0ltl" path="res://char_edit/meshs/mats/young_lightskinned_female_diffuse2.jpg" id="3_a2ev3"]
 [ext_resource type="Texture2D" uid="uid://q081egd4y1v" path="res://char_edit/meshs/mats/materials/MicroDetail/skin_micro_nrm_ao.png" id="3_t7a7m"]
 [ext_resource type="Texture2D" uid="uid://mr50jbfp4doc" path="res://char_edit/meshs/mats/human_female_body_sss.png" id="4_0n5pb"]
-[ext_resource type="Texture2D" path="res://char_edit/meshs/mats/materials/Licenses/translucency_gradient.tres" id="5_saxlq"]
+[ext_resource type="Texture2D" uid="uid://d28htgdgv762y" path="res://char_edit/meshs/mats/materials/translucency_gradient.tres" id="5_wic63"]
 
 [resource]
 render_priority = 0
@@ -35,7 +35,7 @@ shader_parameter/old_lightwarp_fallof = false
 shader_parameter/translucency = true
 shader_parameter/translucency_strength = 0.75
 shader_parameter/texture_translucency = ExtResource("4_0n5pb")
-shader_parameter/texture_translucency_color = ExtResource("5_saxlq")
+shader_parameter/texture_translucency_color = ExtResource("5_wic63")
 shader_parameter/uv1_scale = Vector3(1, 1, 1)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(1, 1, 1)

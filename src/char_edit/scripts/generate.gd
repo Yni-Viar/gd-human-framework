@@ -13,9 +13,14 @@ func _ready():
 	for i in range(mesh_arrs.get_blend_shape_count ()):
 		shp_name_index[mesh_arrs.get_blend_shape_name(i)] = i
 	var blends = mesh_arrs.surface_get_blend_shape_arrays(0)
+	var fingernails_mesh_arrs = mesh_arrs.surface_get_arrays(2)
+	var toenails_mesh_arrs = mesh_arrs.surface_get_arrays(1)
 	mesh_arrs = mesh_arrs.surface_get_arrays(0)
+	
 	var mesh: ArrayMesh = ArrayMesh.new()
-	mesh.add_surface_from_arrays (Mesh.PRIMITIVE_TRIANGLES,mesh_arrs)
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrs)
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,toenails_mesh_arrs)
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,fingernails_mesh_arrs)
 	ResourceSaver.save(mesh,"res://char_edit/meshs/body.mesh",32)
 	var base_form = mesh_arrs[Mesh.ARRAY_VERTEX]
 	var vertex_UV = mesh_arrs[Mesh.ARRAY_TEX_UV]
@@ -24,7 +29,9 @@ func _ready():
 		for j in range(len (base_form)):
 			temp[j] -= base_form [j]
 		blndshp.push_back(temp)
-	var tex: Image = Image.load_from_file("res://char_edit/meshs4gen/vertex_groups.png") # на текстуре надо следить, чтобы одинаковые вершины на швах UV были в одной группе, иначе будет дырка в меше.
+	# UV vertices should be in one group, or holes in mesh will appear.
+	# на текстуре надо следить, чтобы одинаковые вершины на швах UV были в одной группе, иначе будет дырка в меше.
+	var tex: Image = Image.load_from_file("res://char_edit/meshs4gen/vertex_groups.png") 
 	var tex_size: Vector2i = tex.get_size()
 	
 	for i in forms["body"].keys():

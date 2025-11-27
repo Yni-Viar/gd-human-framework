@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cyce3ft2rsva2"]
 
-[ext_resource type="Script" uid="uid://c2abhxqcgaoqy" path="res://addons/gd-human-framework/scripts/char_edit_importer.gd" id="1_q34dq"]
-[ext_resource type="PackedScene" uid="uid://41mkaa72rwnl" path="res://char_edit/morph_slider.tscn" id="2_dcyru"]
+[ext_resource type="Script" uid="uid://c2abhxqcgaoqy" path="res://addons/gd-human-framework/scripts/importer/char_edit_importer.gd" id="1_q34dq"]
+[ext_resource type="PackedScene" uid="uid://41mkaa72rwnl" path="res://addons/gd-human-framework/morph_slider.tscn" id="2_dcyru"]
 
 [node name="Control" type="Control"]
 layout_mode = 3

@@ -17,7 +17,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-char_edit_global="*res://char_edit_global.gd"
+CharEditGlobal="*res://addons/gd-human-framework/scripts/char_edit_global.gd"
 
 [display]
 

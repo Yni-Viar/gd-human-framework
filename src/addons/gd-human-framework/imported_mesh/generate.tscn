@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cuo2uwtsljymq"]
 
-[ext_resource type="Script" uid="uid://yjddx6s3ncdr" path="res://addons/gd-human-framework/scripts/generate.gd" id="1_ve7gn"]
+[ext_resource type="Script" uid="uid://yjddx6s3ncdr" path="res://addons/gd-human-framework/scripts/importer/generate.gd" id="1_ve7gn"]
 
 [node name="generate" type="Node"]
 script = ExtResource("1_ve7gn")

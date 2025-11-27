@@ -1,45 +1,25 @@
-# Go_MakeHuman_dot
-ingame character generator for godot (based on the project Makehuman)
+# GD-Human-Framework
 
-This project for Blender and Godot 4.
-This contain basics *.blend-files with shapes and skeleton and another stuff, include tutorials in the future.
+Godot Human generator.
 
-I solved a big problem with the size of the mesh in the video memory. Previously, each character required a separate bag with all the blendshapes.
-And each character occupied 80 MB of video memory and it is without textures! 
-Characters will now be generated on the fly when loaded onto the stage and do not have blendshapes. 
-This takes one second at worst, and changing the blend size takes about 20 milliseconds. 
-But in memory now blockbuster ranks just 700 kilobytes.
+Based on MakeHuman assets.
 
-ToDo: 
-1. Make big blend-file with shapekeys from MakeHuman, using models from MakeHuman.
-2. Ready for bvh-animation (tutorial).
-3. Ready for Mixamo animation (tutorial).
-4. Fix bvh-animations problem (tutorial). 
-5. Export to Godot with shapekeys and animations (tutorial). Done!
+**New version is W.I.P. and NOT recommended for production - major changes ahead. Use `go_makehuman_dot branch for pre-rework runtime-only generator` instead.**
 
-5.1 Export from Blender to glTF tutorial. 
-https://www.youtube.com/watch?v=k1NCiSvbJ_Y
+## How to enable plugin:
 
-5.2 How use it in Godot tutorial.
-https://www.youtube.com/watch?v=cPVjNh2Ki4I
+1. Add `res://addons/gd-human-framework/scripts/char_edit_global.gd` as global autoload with name `CharEditGlobal`, otherwise plugin won't work properly.
+2. Enable the plugin.
 
+## TODO.
 
+- [ ] Re-add runtime editor front-end.
+- [ ] Make all custom types toggleable.
 
-ToDo in the distant future or never:
+## License:
 
-1. Fix eye's positions for some shapes.
-2. Clothes fitting (no have idea how).
+This project is based on [Go_MakeHuman_dot (see it's readme for advanced asset management)](./README-ORIGINAL.md)
 
-So, i have idea for clothes and eyes. Clothes must have shapekeys same like body.
-In game script must read shape-keys value from body and set it for shape-key clothes.
-
-How attach clothes for sckeleton.
-https://www.youtube.com/watch?v=ljK_FErSPQM
-
-How add shapekey for clothes.
-https://www.youtube.com/watch?v=OnZy3m6Yksk
-
-# License
 ## Godot project
 
 Public Domain or CC-by-zero.
@@ -51,3 +31,8 @@ Public Domain or CC-by-zero.
 There are two components from 2 authors:
 - HumanShaders [(MIT License)](./src/char_edit/meshs/mats/materials/LICENSE_HumanShaders)
 - GdCharacterCreation [(MIT License)](./src/char_edit/meshs/mats/materials/LICENSE_GdCharacterCreation)
+
+## Yni Viar's commentary
+
+Since **Humanizer gone AGPL** (because of copying MakeHuman code, so **previous versions are affected too!!!**),
+I decided to make an alternative human generator.

@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dsxv6iusp287i"]
+[gd_scene load_steps=5 format=3 uid="uid://cot2t8bfff0vt"]
 
-[ext_resource type="Script" uid="uid://dmftkfk4sujxq" path="res://addons/gd-human-framework/scripts/character.gd" id="1_tfq3w"]
-[ext_resource type="Animation" path="res://addons/gd-human-framework/anims/character.tres" id="2_mfnlj"]
+[ext_resource type="Script" uid="uid://dmftkfk4sujxq" path="res://addons/gd-human-framework/scripts/character.gd" id="1_yy6fj"]
+[ext_resource type="Animation" path="res://addons/gd-human-framework/anims/character.tres" id="2_vwqo5"]
 
 [sub_resource type="CapsuleShape3D" id="2"]
 radius = 0.22802734
@@ -9,11 +9,11 @@ height = 1.7058105
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_st2dv"]
 _data = {
-&"skelnewsexydance": ExtResource("2_mfnlj")
+&"skelnewsexydance": ExtResource("2_vwqo5")
 }
 
 [node name="character" type="CharacterBody3D"]
-script = ExtResource("1_tfq3w")
+script = ExtResource("1_yy6fj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8462701, 0)

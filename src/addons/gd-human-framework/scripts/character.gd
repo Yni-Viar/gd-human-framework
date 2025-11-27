@@ -42,13 +42,19 @@ func update_vertex(mesh_inst,vertex_arr,shp_indx,value):
 		vertex_arr[i] += blend[i]*value
 	return vertex_arr
 
-func save_mesh(mesh_inst, vertex_arr):
-	var mat = mesh_inst.get_surface_override_material(0)
-	var mesh_arrs = mesh_inst.mesh.surface_get_arrays(0)
+func save_mesh(mesh_inst: MeshInstance3D, vertex_arr):
+	var mat_arr: Array[Material] = []
+	var mat_count: int = mesh_inst.mesh.get_surface_count()
+	print(mat_count)
+	var mesh_arrs: Array[Array] = []
+	for i in range(mat_count):
+		mat_arr.append(mesh_inst.get_surface_override_material(i))
+		mesh_arrs.append(mesh_inst.mesh.surface_get_arrays(i))
 	mesh_arrs[Mesh.ARRAY_VERTEX] = vertex_arr
 	mesh_inst.mesh = ArrayMesh.new()
-	mesh_inst.mesh.add_surface_from_arrays (Mesh.PRIMITIVE_TRIANGLES,mesh_arrs)
-	mesh_inst.set_surface_override_material(0,mat)
+	for i in range(mat_count):
+		mesh_inst.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrs[i])
+		mesh_inst.set_surface_override_material(i,mat_arr[i])
 
 func update_morph(shape_name,value):
 	var temp = value;

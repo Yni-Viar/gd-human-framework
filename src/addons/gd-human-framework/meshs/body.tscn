@@ -4,7 +4,6 @@
 [ext_resource type="Material" uid="uid://sg58vfavie8e" path="res://addons/gd-human-framework/meshs/mats/woman.tres" id="2_i3qb6"]
 [ext_resource type="Material" uid="uid://cc3rtqtlhlkci" path="res://addons/gd-human-framework/meshs/mats/materials/nails_material.tres" id="3_jojec"]
 
-
 [node name="body" type="MeshInstance3D"]
 mesh = ExtResource("2")
 surface_material_override/0 = ExtResource("2_i3qb6")

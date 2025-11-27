@@ -14,6 +14,7 @@ Based on MakeHuman assets.
 ## TODO.
 
 - [ ] Re-add runtime editor front-end.
+- [ ] Instantiate base human instead of simply editing.
 - [ ] Make all custom types toggleable.
 
 ## License:

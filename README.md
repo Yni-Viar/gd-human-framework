@@ -13,7 +13,6 @@ Based on MakeHuman assets.
 
 ## TODO.
 
-- [ ] Add customization panel for morphs, not only for clothes
 - [ ] Re-add runtime editor front-end.
 - [ ] Instantiate base human instead of simply editing.
 - [ ] Make all custom types toggleable.

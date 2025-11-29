@@ -13,4 +13,4 @@ func _process(delta: float) -> void:
 
 
 func _on_button_toggled(toggled_on: bool) -> void:
-	get_parent().get_parent().get_parent().get_parent().call("set_item", get_node("Button").text, toggled_on)
+	get_parent().get_parent().get_parent().get_parent().get_parent().call("set_item", get_node("Button").text, toggled_on)

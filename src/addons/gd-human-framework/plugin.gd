@@ -6,7 +6,7 @@ var clothes_editor: Button
 
 func _enter_tree() -> void:
 	# add_autoload_singleton("char_edit_global", "res://addons/gd-human-framework/scripts/char_edit_global.gd")
-	clothes_editor = add_control_to_bottom_panel(load("res://addons/gd-human-framework/scripts/editor/clothes_select.tscn").instantiate(), "Equip clothes")
+	clothes_editor = add_control_to_bottom_panel(load("res://addons/gd-human-framework/scripts/editor/char_edit_editor.tscn").instantiate(), "Change morphs/clothes")
 	CharEditGlobal.clothes_button = clothes_editor
 	clothes_editor.hide()
 	add_tool_menu_item("Import meshes to the library", import_meshes)

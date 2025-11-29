@@ -6,7 +6,8 @@ class_name HumanImporter
 
 func import_meshes():
 	# This is generation of necessary arrays.
-	var forms = load("res://addons/gd-human-framework/imported_mesh/char_edit_importer.tscn").instantiate()
+	var forms = load("res://addons/gd-human-framework/scripts/editor/char_edit_editor.tscn").instantiate()
+	forms.import = true
 	add_child(forms)
 	forms.hide()
 	forms = forms.forms

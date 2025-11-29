@@ -7,10 +7,10 @@ func _ready() -> void:
 		var item = load("res://addons/gd-human-framework/scripts/editor/clothes_item.tscn").instantiate()
 		match CharEditGlobal.cloth_array[key]:
 			"bodyparts":
-				$VBoxContainer/BodyParts/VBoxContainer.add_child(item)
+				$VBoxContainer/BodyParts/ScrollContainer/VBoxContainer.add_child(item)
 				item.get_node("Button").text = key
 			"clothes":
-				$VBoxContainer/Clothes/VBoxContainer.add_child(item)
+				$VBoxContainer/Clothes/ScrollContainer/VBoxContainer.add_child(item)
 				item.get_node("Button").text = key
 
 func set_item(item: String, value: bool):

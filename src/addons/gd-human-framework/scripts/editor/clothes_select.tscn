@@ -3,16 +3,16 @@
 [ext_resource type="Script" uid="uid://8okavjlvhhdo" path="res://addons/gd-human-framework/scripts/editor/clothes_select.gd" id="1_1yi3n"]
 
 [node name="ClothesSelect" type="Control"]
-custom_minimum_size = Vector2(320, 240)
+custom_minimum_size = Vector2(320, 200)
 layout_mode = 3
-anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.27800003
+offset_bottom = -0.16001892
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1yi3n")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,15 +21,24 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BodyParts" type="FoldableContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
 title = "Body parts"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/BodyParts"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/BodyParts"]
 layout_mode = 2
 
+[node name="VBoxContainer" type="GridContainer" parent="VBoxContainer/BodyParts/ScrollContainer"]
+layout_mode = 2
+columns = 2
+
 [node name="Clothes" type="FoldableContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
 title = "Clothes"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Clothes"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Clothes"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="GridContainer" parent="VBoxContainer/Clothes/ScrollContainer"]
 layout_mode = 2

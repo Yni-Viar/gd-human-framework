@@ -1,34 +1,37 @@
-@tool
 extends Control
 
 var forms: Dictionary = {}
+var import: bool = false
 var character: HumanGeneratorCharacter
-var randomize_intensity: float = 0.5;
+var randomize_intensity: float = 0.5
+
+var editor_visible: bool = false
+
 func _ready():
 	randomize()
 	var Body_forms: Dictionary = {}
 	var Head_forms: Dictionary = {}
 	var Exp_forms: Dictionary = {}
 	# connect all signals for all sliders
-	var morphs=$morphs/Body.get_children()
+	var morphs=$morphs/Body/GridContainer.get_children()
 	for i in morphs:
-		i.connect("change_morph", Callable(self, "change_morph"))
+		#i.connect("change_morph", Callable(self, "change_morph"))
 		Body_forms[i.text] = i.vertex_groups
-	morphs=$morphs/Head.get_children()
+	morphs=$morphs/Head/GridContainer.get_children()
 	for i in morphs:
-		i.connect("change_morph", Callable(self, "change_morph"))
+		#i.connect("change_morph", Callable(self, "change_morph"))
 		Head_forms[i.text] = i.vertex_groups
-	morphs=$morphs/Face.get_children()
+	morphs=$morphs/Face/GridContainer.get_children()
 	for i in morphs:
-		i.connect("change_morph", Callable(self, "change_morph"))
+		#i.connect("change_morph", Callable(self, "change_morph"))
 		Head_forms[i.text] = i.vertex_groups
-	morphs=$morphs/Eyes.get_children()
+	morphs=$morphs/Eyes/GridContainer.get_children()
 	for i in morphs:
-		i.connect("change_morph", Callable(self, "change_morph"))
+		#i.connect("change_morph", Callable(self, "change_morph"))
 		Head_forms[i.text] = i.vertex_groups
-	morphs=$morphs/Exp.get_children()
+	morphs=$morphs/Exp/GridContainer.get_children()
 	for i in morphs:
-		i.connect("change_morph", Callable(self, "change_morph"))
+		#i.connect("change_morph", Callable(self, "change_morph"))
 		Exp_forms[i.text] = i.vertex_groups
 	forms["body"] = Body_forms
 	forms["head"] = Head_forms
@@ -80,16 +83,16 @@ func _on_open_file_file_selected(path):
 func reset_tab_slider(morphs, appearance):
 	for sld in morphs:
 		if appearance.has(sld.text):
-			sld.set_slider (appearance[sld.text])
+			sld.set_slider(appearance[sld.text])
 		else:
 			sld.set_slider(0)
 
 func reset_all_sliders(appearance):
-	reset_tab_slider($morphs/Body.get_children(), appearance)
-	reset_tab_slider($morphs/Head.get_children(), appearance)
-	reset_tab_slider($morphs/Face.get_children(), appearance)
-	reset_tab_slider($morphs/Eyes.get_children(), appearance)
-	reset_tab_slider($morphs/Exp.get_children(), appearance)
+	reset_tab_slider($morphs/Body/GridContainer.get_children(), appearance)
+	reset_tab_slider($morphs/Head/GridContainer.get_children(), appearance)
+	reset_tab_slider($morphs/Face/GridContainer.get_children(), appearance)
+	reset_tab_slider($morphs/Eyes/GridContainer.get_children(), appearance)
+	reset_tab_slider($morphs/Exp/GridContainer.get_children(), appearance)
 	
 func reset_character(chr):
 	character=chr
@@ -97,16 +100,15 @@ func reset_character(chr):
 
 func _on_random_gen_pressed():
 	character.random_face_gen(randomize_intensity)
-	reset_tab_slider($morphs/Head.get_children(),character.appearance)
-	reset_tab_slider($morphs/Face.get_children(),character.appearance)
-	reset_tab_slider($morphs/Eyes.get_children(),character.appearance)
+	reset_tab_slider($morphs/Head/GridContainer.get_children(),character.appearance)
+	reset_tab_slider($morphs/Face/GridContainer.get_children(),character.appearance)
+	reset_tab_slider($morphs/Eyes/GridContainer.get_children(),character.appearance)
 	
 func _on_print_pressed():
 	$tips.text=str(character.appearance)
 
 func set_intensity(value):
 	randomize_intensity = value
-
 
 func _on_dress_mini_03_toggled(button_pressed):
 	if button_pressed:
@@ -125,3 +127,4 @@ func _on_male_jeans_01_toggled(button_pressed):
 		character.take_on_clothes("male_jeans_01")
 	else:
 		character.take_off_clothes("male_jeans_01")
+	

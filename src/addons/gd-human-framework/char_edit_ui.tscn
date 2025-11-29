@@ -1,0 +1,1174 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8fsk0pshx2qt"]
+
+[ext_resource type="Script" uid="uid://onupwf4ixmvh" path="res://addons/gd-human-framework/scripts/char_edit_ui.gd" id="1_n6yna"]
+[ext_resource type="PackedScene" uid="uid://41mkaa72rwnl" path="res://addons/gd-human-framework/morph_slider.tscn" id="2_ce0r4"]
+[ext_resource type="PackedScene" uid="uid://cp35j8fasvyql" path="res://addons/gd-human-framework/scripts/editor/clothes_select.tscn" id="3_k4852"]
+
+[sub_resource type="GDScript" id="GDScript_n6yna"]
+script/source = "extends Camera3D
+var right_mouse_pressed = false
+var midle_mouse_pressed = false
+var speed_rot=0.005
+var default_translation = Vector3()
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	default_translation = $spt.position
+	pass # Replace with function body.
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			if event.pressed:
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				right_mouse_pressed = true
+			else:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+				right_mouse_pressed = false
+		if event.button_index == MOUSE_BUTTON_MIDDLE:
+			if event.pressed:
+				midle_mouse_pressed = true
+			else:
+				midle_mouse_pressed = false
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			$spt.position.z += speed_rot*5
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			$spt.position.z -= speed_rot*5
+	if event is InputEventMouseMotion:
+		if midle_mouse_pressed:
+			if (abs(event.relative.x) > abs(event.relative.y)):
+				$spt.position.x +=event.relative.x*speed_rot
+			else:
+				$spt.position.y -=event.relative.y*speed_rot
+		if right_mouse_pressed:
+			if (abs(event.relative.x) > abs(event.relative.y)):
+				$spt.rotate_y(event.relative.x*speed_rot)
+			else:
+				$spt.rotate_x(event.relative.y*speed_rot)
+
+
+
+func _on_reset_view_pressed():
+	$spt.position = default_translation
+	$spt.rotation_degrees = Vector3 (0,0,0)
+"
+
+[node name="Control" type="Control"]
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = -479.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n6yna")
+
+[node name="random_gen" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Random face generator"
+
+[node name="Label" type="Label" parent="random_gen"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -40.0
+offset_right = 178.0
+offset_bottom = -16.0
+text = "face cartoonish"
+
+[node name="HSlider" type="HSlider" parent="random_gen/Label"]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 20.0
+offset_right = 171.0
+offset_bottom = 36.0
+max_value = 1.0
+step = 0.0
+value = 1.0
+ticks_on_borders = true
+
+[node name="Options" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -211.0
+offset_bottom = 31.0
+grow_horizontal = 0
+
+[node name="print" type="Button" parent="Options"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "print params"
+
+[node name="save" type="Button" parent="Options"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+action_mode = 0
+text = "Save"
+
+[node name="open" type="Button" parent="Options"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+action_mode = 0
+text = "Open"
+
+[node name="cam" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0345633, 0.865932, 1.52344)
+size = 1.5
+near = 0.01
+script = SubResource("GDScript_n6yna")
+
+[node name="spt" type="Node3D" parent="cam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0303633, -0.898369, -1.43457)
+
+[node name="save_file" type="FileDialog" parent="."]
+access = 2
+filters = PackedStringArray("*.json")
+
+[node name="open_file" type="FileDialog" parent="."]
+access = 2
+filters = PackedStringArray("*.json")
+
+[node name="morphs" type="TabContainer" parent="."]
+custom_minimum_size = Vector2(1024, 240)
+layout_mode = 0
+offset_right = 523.0
+offset_bottom = 199.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+current_tab = 5
+
+[node name="Body" type="TabBar" parent="morphs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="GridContainer" type="GridContainer" parent="morphs/Body"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 8
+
+[node name="fat" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "fat"
+vertex_groups = PackedColorArray()
+
+[node name="zombie" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "zombie"
+vertex_groups = PackedColorArray()
+
+[node name="armfat" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "armfat"
+vertex_groups = PackedColorArray(0, 1, 0, 1)
+
+[node name="legfat" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "legfat"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 1, 1)
+
+[node name="woman1" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "woman1"
+vertex_groups = PackedColorArray()
+
+[node name="woman2" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "woman2"
+vertex_groups = PackedColorArray()
+
+[node name="man" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "man"
+vertex_groups = PackedColorArray()
+
+[node name="skinny" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "skinny"
+vertex_groups = PackedColorArray()
+
+[node name="muscle" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "muscle"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1)
+
+[node name="armmuscle" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "armmuscle"
+vertex_groups = PackedColorArray(0, 1, 0, 1)
+
+[node name="legmuscle" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "legmuscle"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 1, 1)
+
+[node name="old" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "old"
+vertex_groups = PackedColorArray()
+
+[node name="child" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "child"
+vertex_groups = PackedColorArray()
+
+[node name="pregnancy" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "pregnancy"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="stomach+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "stomach+"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="stomach-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "stomach-"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="navel-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "navel-"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="navel+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "navel+"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="navel_move" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "navel_move"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="butt_cast" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "butt_cast"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="butt_pam1_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "butt_pam1_+"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="butt_pam1_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "butt_pam1_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="breast1" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast1"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="breast2" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast2"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="breast3" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast3"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="breast_pam1" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast_pam1"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="breast_pam2" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast_pam2"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 0, 1)
+
+[node name="breast_pam3" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast_pam3"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="breast_pam4_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast_pam4_+"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="breast_pam4_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "breast_pam4_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 0, 1)
+
+[node name="torso_pam1_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam1_+"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1)
+
+[node name="torso_pam1_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam1_-"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1)
+
+[node name="torso_pam2_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam2_+"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="torso_pam3_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam3_+"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 1, 1)
+
+[node name="torso_pam4_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam4_+"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 1, 1)
+
+[node name="torso_pam3_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam3_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 1, 1)
+
+[node name="torso_pam2_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam2_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 0, 1)
+
+[node name="torso_pam4_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam4_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 1, 1)
+
+[node name="torso_pam5_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam5_+"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="torso_pam5_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam5_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="torso_pam6" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam6"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1)
+
+[node name="torso_pam7" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam7"
+vertex_groups = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1)
+
+[node name="torso_pam8_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam8_+"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 0, 1)
+
+[node name="torso_pam8_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam8_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1, 0, 1, 0, 1)
+
+[node name="torso_pam9_+" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam9_+"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="torso_pam9_-" parent="morphs/Body/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "torso_pam9_-"
+vertex_groups = PackedColorArray(0, 0, 1, 1)
+
+[node name="Head" type="TabBar" parent="morphs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="GridContainer" type="GridContainer" parent="morphs/Head"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 8
+
+[node name="african" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "african"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1)
+
+[node name="asian" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "asian"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+
+[node name="caucasian" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "caucasian"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="double_neck" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "double_neck"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1)
+
+[node name="head_young" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_young"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="head_oval" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_oval"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="head_circle" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_circle"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="head_quad" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_quad"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="head_inv_tris" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_inv_tris"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="head_tris" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_tris"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="head_visok_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_visok_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="head _visok_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head _visok_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="neck_scale_XY" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "neck_scale_XY"
+vertex_groups = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1)
+
+[node name="head_scale_X" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_scale_X"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="head_scale_Y" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_scale_Y"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="head_scale_Z" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_scale_Z"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="head_pam1_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam1_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="head_pam1_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam1_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="head_pam2_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam2_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="head_pam_2_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam_2_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="head_pam_3_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam_3_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="head_pam_3_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam_3_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="head_pam_4_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam_4_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+
+[node name="head_pam_4_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam_4_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+
+[node name="head_pam_5_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam_5_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+
+[node name="head_pam_5_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "head_pam_5_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+
+[node name="cheek_pam1_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "cheek_pam1_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="cheek_pam1_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "cheek_pam1_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="cheek_pam2_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "cheek_pam2_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1)
+
+[node name="cheek_pam3_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "cheek_pam3_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 0, 1, 1)
+
+[node name="cheek_pam4+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "cheek_pam4+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="cheek_pam4_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "cheek_pam4_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="jaw_pam1_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam1_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam3_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam3_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam1_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam1_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam2" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam2"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam3_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam3_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam4_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam4_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam4_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam4_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam5_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam5_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam5_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam5_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam6_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam6_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam6_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam6_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam7_+" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam7_+"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="jaw_pam7_-" parent="morphs/Head/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "jaw_pam7_-"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="Face" type="TabBar" parent="morphs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="GridContainer" type="GridContainer" parent="morphs/Face"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 8
+
+[node name="nose_scale_X" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_X"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_Y" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_Y"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_Z" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_Z"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_move_Y_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_move_Y_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_move_Z_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_move_Z_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_move_Y_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_move_Y_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_move_Z_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_move_Z_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_1_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_1_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_2_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_2_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_3_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_3_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_1_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_1_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_2_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_2_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_scale_3_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_scale_3_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam1_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam1_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam1_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam1_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam2_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam2_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam2_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam2_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam3_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam3_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam3_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam3_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam4_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam4_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[node name="nose_pam5" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam5"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam4_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam4_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam6_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam6_+"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="nose_pam6_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "nose_pam6_-"
+vertex_groups = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="lips_scale_X_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_scale_X_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_scale_Y_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_scale_Y_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_scale_Z_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_scale_Z_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_scale_X_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_scale_X_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_scale_Y_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_scale_Y_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1, 1, 0, 1, 1)
+
+[node name="lips_scale_Z_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_scale_Z_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_move_Y_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_move_Y_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1)
+
+[node name="lips_move_Y_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_move_Y_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1, 1, 0, 1, 1)
+
+[node name="lips_move_Z_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_move_Z_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_move_Z_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_move_Z_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1, 1, 0, 1, 1)
+
+[node name="lips_pam1_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam1_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1)
+
+[node name="lips_pam2_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam2_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1)
+
+[node name="lips_pam3_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam3_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_pam4_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam4_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_pam5_+" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam5_+"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_pam1_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam1_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_pam2_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam2_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1)
+
+[node name="lips_pam3_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam3_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_pam4_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam4_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="lips_pam5_-" parent="morphs/Face/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "lips_pam5_-"
+vertex_groups = PackedColorArray(0, 0, 0, 1)
+
+[node name="Eyes" type="TabBar" parent="morphs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="GridContainer" type="GridContainer" parent="morphs/Eyes"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 9
+
+[node name="eye_pam2_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam2_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1)
+
+[node name="eye_pam2_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam2_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1)
+
+[node name="eye_pam1" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam1"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam3_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam3_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1, 1, 0, 1, 1)
+
+[node name="eye_pam4_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam4_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam5_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam5_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam5_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam5_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam6_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam6_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam6_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam6_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam_7_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam_7_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam_7_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam_7_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam_8_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam_8_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam_9_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam_9_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam_8_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam_8_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam_9_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam_9_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam10_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam10_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam10_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam10_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam11_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam11_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam11_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam11_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam12_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam12_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam12_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam12_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam13_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam13_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam13_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam13_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam14_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam14_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam14_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam14_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam15_+" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam15_+"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="eye_pam15_-" parent="morphs/Eyes/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "eye_pam15_-"
+vertex_groups = PackedColorArray(1, 1, 1, 1)
+
+[node name="Exp" type="TabBar" parent="morphs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
+
+[node name="GridContainer" type="GridContainer" parent="morphs/Exp"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 9
+
+[node name="exp_anger" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_anger"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0.996078, 1, 1)
+
+[node name="exp_boring" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_boring"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_cry" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_cry"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_determination" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_determination"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_disgust" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_disgust"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_doubt" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_doubt"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_effort1" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_effort1"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_effort3" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_effort3"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_fear3" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_fear3"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_sad1" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_sad1"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_sad2" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_sad2"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_sleep" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_sleep"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_stun" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_stun"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_smile1" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_smile1"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_smile2" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_smile2"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_smile3" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_smile3"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_smile4" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_smile4"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[node name="exp_smile5" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_smile5"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_treaten" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_treaten"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_aim" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_aim"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_vocal" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_vocal"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_fff" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_fff"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_concentrating" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_concentrating"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="exp_airkiss" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_airkiss"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[node name="exp_devicios" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_devicios"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[node name="exp_sick" parent="morphs/Exp/GridContainer" instance=ExtResource("2_ce0r4")]
+layout_mode = 2
+text = "exp_sick"
+vertex_groups = PackedColorArray(1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1)
+
+[node name="Clothes" type="TabBar" parent="morphs"]
+layout_mode = 2
+metadata/_tab_index = 5
+
+[node name="ClothesSelect" parent="morphs/Clothes" instance=ExtResource("3_k4852")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -512.0
+offset_top = -100.0
+offset_right = 512.0
+offset_bottom = 100.0
+
+[connection signal="pressed" from="random_gen" to="." method="_on_random_gen_pressed"]
+[connection signal="value_changed" from="random_gen/Label/HSlider" to="." method="set_intensity"]
+[connection signal="pressed" from="Options/print" to="." method="_on_print_pressed"]
+[connection signal="pressed" from="Options/save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Options/open" to="." method="_on_open_pressed"]
+[connection signal="file_selected" from="save_file" to="." method="_on_save_file_file_selected"]
+[connection signal="file_selected" from="open_file" to="." method="_on_open_file_file_selected"]

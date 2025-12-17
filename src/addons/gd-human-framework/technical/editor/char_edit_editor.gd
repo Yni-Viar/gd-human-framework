@@ -44,6 +44,9 @@ func _ready():
 		path = path.substr(0,path.rfind("/")+1)
 	$save_file.current_dir = path
 	$open_file.current_dir = path
+	
+	if Engine.is_editor_hint() && !import:
+		EditorInterface.get_selection().selection_changed.connect(_on_selection_changed)
 
 func set_character(human):
 	character = human
@@ -129,14 +132,19 @@ func _on_male_jeans_01_toggled(button_pressed):
 	else:
 		character.take_off_clothes("male_jeans_01")
 
-func _process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		if CharEditGlobal.clothes_button.is_visible_in_tree() && !editor_visible:
-			editor_visible = true
-			if !import:
-				character = get_tree().edited_scene_root.get_child(0)
-		elif !CharEditGlobal.clothes_button.is_visible_in_tree() && editor_visible:
-			editor_visible = false
-			if !import:
+func _on_selection_changed():
+	var selected_node: Array[Node] = EditorInterface.get_selection().get_selected_nodes()
+	if selected_node.size() > 0:
+		if selected_node[0].get_child_count(true) > 0:
+			if selected_node[0].get_child(0) is HumanGeneratorCharacter:
+				character = EditorInterface.get_selection().get_selected_nodes()[0].get_child(0)
+				CharEditGlobal.clothes_button.show()
+			else:
 				character = null
-	
+				CharEditGlobal.clothes_button.hide()
+		else:
+			character = null
+			CharEditGlobal.clothes_button.hide()
+	else:
+		character = null
+		CharEditGlobal.clothes_button.hide()

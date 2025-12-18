@@ -78,6 +78,9 @@ func _on_open_pressed():
 
 func _on_save_file_file_selected(path):
 	save_json(path,character.appearance)
+	var packed_character = character.duplicate()
+	packed_character.get_node("skeleton/body").bake_mesh_from_current_blend_shape_mix(packed_character.get_node("skeleton/body").mesh)
+	_save_to_gltf(packed_character, path + ".gltf")
 
 func _on_open_file_file_selected(path):
 	character.appearance=load_json(path)
@@ -135,7 +138,7 @@ func _on_male_jeans_01_toggled(button_pressed):
 func _on_selection_changed():
 	var selected_node: Array[Node] = EditorInterface.get_selection().get_selected_nodes()
 	if selected_node.size() > 0:
-		if selected_node[0].get_child_count(true) > 0:
+		if selected_node[0].get_child_count() > 0:
 			if selected_node[0].get_child(0) is HumanGeneratorCharacter:
 				character = EditorInterface.get_selection().get_selected_nodes()[0].get_child(0)
 				CharEditGlobal.clothes_button.show()
@@ -148,3 +151,13 @@ func _on_selection_changed():
 	else:
 		character = null
 		CharEditGlobal.clothes_button.hide()
+
+func _save_to_gltf(gltf_scene_root_node: Node3D, path: String):
+	# Save a new glTF scene.
+	var gltf_document_save := GLTFDocument.new()
+	var gltf_state_save := GLTFState.new()
+	gltf_document_save.append_from_scene(gltf_scene_root_node, gltf_state_save)
+	# The file extension in the output `path` (`.gltf` or `.glb`) determines
+	# whether the output uses text or binary format.
+	# `GLTFDocument.generate_buffer()` is also available for saving to memory.
+	gltf_document_save.write_to_filesystem(gltf_state_save, path)

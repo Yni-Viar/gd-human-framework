@@ -4,8 +4,6 @@ Godot Human generator for Godot 4.5 (tested) and higher.
 
 Based on MakeHuman assets.
 
-**New version is W.I.P. and NOT recommended for production - major changes ahead. Use `go_makehuman_dot branch for pre-rework runtime-only generator` instead.**
-
 ## How to enable plugin:
 
 1. Add `res://addons/gd-human-framework/scripts/char_edit_global.gd` as global autoload with name `CharEditGlobal`, otherwise plugin won't work properly.
@@ -17,9 +15,10 @@ After enabling the plugin (v0.0.2 and higher), add `HumanCharacter` node to crea
 
 Alternatively, you can run game (v0.1.0 and higher) for customizing a human
 
+You can save blend shapes to GLTF since v0.2.0 (Editor only!) - click "save button" and you will save current config + GLTF baked model.
+
 ## TODO.
 
-- [ ] Add support for baking blend shapes.
 - [ ] Make all custom types toggleable.
 
 ## License:
